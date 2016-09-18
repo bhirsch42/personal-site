@@ -7,15 +7,16 @@ const sass         = require('gulp-sass');
 const sourcemaps   = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync  = require('browser-sync');
-const data = require('gulp-data');
-const frontMatter = require('gulp-front-matter');
+const data         = require('gulp-data');
+const frontMatter  = require('gulp-front-matter');
+const prettyUrl    = require("gulp-pretty-url");
 
 srcPaths = {
   stylesheets: './src/stylesheets/*.scss',
   scripts: './src/scripts/*.js',
-  templates: './src/{,posts/}*.hbs',
+  templates: './src/{,projects/}*.hbs',
   hbs: {
-    partials: './src/assets/partials/**/*.hbs',
+    partials: './src/assets/partials/*.hbs',
     helpers: './src/assets/helpers/*.js',
     data: './src/assets/hbdata/**/*.{js,json}'
   }
@@ -48,13 +49,37 @@ gulp.task('clean', () => {
   return del([buildPaths.root]);
 });
 
+
+
 // Build HTML from Handlebars templates
-gulp.task('templates', () => {
+var hbData;
+
+function addGlobalDataFromFile(data) {
+  if (data.frontMatter.collection) {
+    hbData[data.frontMatter.collection] = hbData[data.frontMatter.collection] || [];
+    hbData[data.frontMatter.collection].push(data);
+  }
+}
+
+gulp.task('refreshData', () => {
+  hbData = {};
+
+  return gulp
+    .src(srcPaths.templates)
+    .pipe(frontMatter({remove: false})
+      .on('data', file => {
+        addGlobalDataFromFile(file);
+      }));
+})
+
+gulp.task('templates', ['refreshData'], () => {
   var hbStream = hb()
     .partials(srcPaths.hbs.partials)
     .helpers(require('handlebars-layouts'))
+    .helpers('./assets/helpers/*.js')
     .helpers(srcPaths.hbs.helpers)
     .data(srcPaths.hbs.data)
+    .data(hbData)
 
   return gulp
     .src(srcPaths.templates)
@@ -66,6 +91,7 @@ gulp.task('templates', () => {
     .pipe(rename({
       extname: '.html'
     }))
+    .pipe(prettyUrl())
     .pipe(gulp.dest(buildPaths.templates));
 })
 

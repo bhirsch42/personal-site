@@ -1,3 +1,7 @@
+---
+foo: 'bar'
+---
+
 {{#extend "layout"}}
   {{#content "body"}}
   <div class="center">
@@ -22,6 +26,12 @@
 
   <hr>
   <h1>Projects</h1>
+  <ul>
+  {{#each @root.Projects}}
+   <li><a href="{{url this}}">{{frontMatter.title}}</div></li>
+  {{/each}}
+  </ul>
+
   {{/content}}
 
   {{#content "footer"}}
