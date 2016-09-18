@@ -1,29 +1,32 @@
-{{> layout}}
-
-<div class="center">
-  <div class="big">Ben Hirsch</div>
-  <div>
-    <span class="height-preserver">I</span>
-    <span class="gag-title" id="gag-title">Web Dev Rockstar</span>
-    <span class="height-preserver">I</span>
+{{#extend "layout"}}
+  {{#content "body"}}
+  <div class="center">
+    <div class="big">Ben Hirsch</div>
+    <div>
+      <span class="height-preserver">I</span>
+      <span class="gag-title" id="gag-title">Web Dev Rockstar</span>
+      <span class="height-preserver">I</span>
+    </div>
+    <div class="links">
+      <li>
+        <ul><a href="/projects">Projects {{author}}</a></ul>
+        <ul><a href="/resume">Resumé</a></ul>
+      </li>
+    </div>
   </div>
-  <div class="links">
-    <li>
-      <ul><a href="/projects">Projects</a></ul>
-      <ul><a href="/resume">Resumé</a></ul>
-    </li>
+
+  <div class="message-gag-wrapper">
+    <div class="message-gag">
+     </div>
   </div>
-</div>
 
-<div class="message-gag-wrapper">
-  <div class="message-gag">
-   </div>
-</div>
+  <hr>
+  <h1>Projects</h1>
+  {{/content}}
 
-<hr>
-<h1>Projects</h1>
+  {{#content "footer"}}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
+    <script type="text/javascript" src="/scripts/script.js"></script>
+  {{/content}}
 
-<footer>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.0/jquery.min.js"></script>
-  <script type="text/javascript" src="/scripts/script.js"></script>
-</footer>
+{{/extend}}

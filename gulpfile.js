@@ -7,6 +7,7 @@ const sass         = require('gulp-sass');
 const sourcemaps   = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync  = require('browser-sync');
+const data = require('gulp-data');
 
 srcPaths = {
   stylesheets: './src/stylesheets/*.scss',
@@ -15,7 +16,7 @@ srcPaths = {
   hbs: {
     partials: './src/assets/partials/**/*.hbs',
     helpers: './src/assets/helpers/*.js',
-    data: './src/assets/data/**/*.{js,json}'
+    data: './src/assets/hbdata/**/*.{js,json}'
   }
 }
 
@@ -34,7 +35,6 @@ defaultTasks = [
 gulp.task('default', defaultTasks, () => {});
 
 buildTasks = [
-  'clean',
   'templates',
   'stylesheets',
   'scripts'
@@ -49,13 +49,14 @@ gulp.task('clean', () => {
 
 // Build HTML from Handlebars templates
 gulp.task('templates', () => {
+  var hbStream = hb()
+    .partials(srcPaths.hbs.partials)
+    .helpers(require('handlebars-layouts'))
+    .helpers(srcPaths.hbs.helpers)
+    .data(srcPaths.hbs.data)
   return gulp
     .src(srcPaths.templates)
-    .pipe(hb({
-      partials: srcPaths.hbs.partials,
-      helpers: srcPaths.hbs.helpers,
-      data: srcPaths.hbs.data
-    }))
+    .pipe(hbStream)
     .pipe(rename({
       extname: '.html'
     }))
@@ -105,8 +106,8 @@ gulp.task('scripts', () => {
 // BrowserSync
 syncTasks = [
   'stylesheets-watch',
-  'templates-watch',
-  'scripts-watch'
+  // 'templates-watch',
+  // 'scripts-watch'
 ]
 
 gulp.task('browser-sync', syncTasks, () => {
@@ -115,6 +116,10 @@ gulp.task('browser-sync', syncTasks, () => {
       baseDir: buildPaths.root
     }
   })
+
+  gulp
+    .watch([srcPaths.templates, srcPaths.hbs.partials, srcPaths.hbs.helpers, srcPaths.hbs.data], ['templates-watch'])
+    .watch(srcPaths.scripts, ['scripts-watch'])
 });
 
 gulp.task('stylesheets-watch', function() {
@@ -126,20 +131,12 @@ gulp.task('stylesheets-watch', function() {
     });
 });
 
-gulp.task('templates-watch', function() {
-  return gulp
-    .watch([srcPaths.templates, srcPaths.hbs.partials, srcPaths.hbs.helpers, srcPaths.hbs.data], ['templates'])
-    .on('change', function(event) {
-      console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-      browserSync.reload()
-    });
+gulp.task('templates-watch', ['templates'], (done) => {
+  browserSync.reload();
+  done();
 });
 
 gulp.task('scripts-watch', function() {
-  return gulp
-    .watch(srcPaths.scripts, ['scripts'])
-    .on('change', function(event) {
-      console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-      browserSync.reload()
-    });
+  browserSync.reload();
+  done();
 });
