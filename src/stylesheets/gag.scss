@@ -1,0 +1,138 @@
+@keyframes blink{
+  0%   {opacity: 0;}
+  1%   {opacity: 1}
+
+  50%  {opacity: 1;}
+  51%  {opacity: 0;}
+}
+
+#gag-title {
+  position: relative;
+  min-width: 4px;
+  &::after {
+    content: "";
+    width: 2px;
+    height: 100%;
+    position: absolute;
+    right: 0;
+    top: 0;
+    background-color: black;
+    opacity: 0
+  }
+  &.blink {
+    &::after {
+      animation: blink 1s infinite;
+    }
+  }
+  &.blink-stay {
+    &::after {
+      animation: none;
+      opacity: 1;
+    }
+  }
+}
+
+.gag-title {
+  font-weight: 300;
+  font-size: 5vw;
+  @media screen and (min-width: 800px) {
+    font-size: 4vw;
+  }
+  @media screen and (max-width: 650px) {
+    font-size: 7vw;
+  }
+}
+
+.height-preserver {
+  opacity: 0;
+}
+
+.message-gag-wrapper {
+  margin-top: 15px;
+  width: 95%;
+  margin-left: 2.5%;
+  margin-right: 2.5%;
+  height: 250px;
+  overflow: hidden;
+  position: relative;
+  &::after {
+    content: "";
+    width: 100%;
+    height: 0px;
+    background-color: red;
+    position: absolute;
+    top: 0;
+    left: 0;
+    box-shadow: 0px 0px 40px 40px white;
+  }
+}
+
+.message-gag {
+  position: absolute !important;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: flex-end;
+  overflow: hidden;
+
+  position: relative;
+
+  .message {
+    border-radius: 5px;
+    padding: 15px;
+    margin: 15px;
+    max-width: 250px;
+    position: relative;
+
+    &::after {
+      content: "";
+      position: absolute;
+      bottom: 0;
+      width: 0;
+      height: 0;
+      border-left: 10px solid transparent;
+      border-right: 10px solid transparent;
+    }
+  }
+
+  .gag-wrapper {
+    transition: height .4s ease;
+    width: 100%;
+    height: 0;
+    overflow: hidden;
+    display: flex;
+
+    &.gag-wrapper-right {
+      display: -webkit-flex;
+      display: flex;
+      -webkit-flex-direction: row;
+      flex-direction: row;
+      -webkit-justify-content: flex-end;
+      justify-content: flex-end;
+    }
+  }
+
+  .gag-left {
+    .message {
+      background-color: #d8dbe2;
+      color: black;
+      &::after {
+        left: -10px;
+        border-bottom: 10px solid #d8dbe2;
+      }
+    }
+  }
+  .gag-right {
+    .message {
+      color: white;
+      background-color: #3993DD;
+      &::after {
+        right: -10px;
+        border-bottom: 10px solid #3993DD;
+      }
+    }
+  }
+}
+
