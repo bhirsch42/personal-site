@@ -8,6 +8,7 @@ const sourcemaps   = require('gulp-sourcemaps');
 const autoprefixer = require('gulp-autoprefixer');
 const browserSync  = require('browser-sync');
 const data = require('gulp-data');
+const frontMatter = require('gulp-front-matter');
 
 srcPaths = {
   stylesheets: './src/stylesheets/*.scss',
@@ -54,8 +55,13 @@ gulp.task('templates', () => {
     .helpers(require('handlebars-layouts'))
     .helpers(srcPaths.hbs.helpers)
     .data(srcPaths.hbs.data)
+
   return gulp
     .src(srcPaths.templates)
+    .pipe(data((file) => {
+      return require(file.path.replace('.html', '.json'));
+    }))
+    .pipe(frontMatter())
     .pipe(hbStream)
     .pipe(rename({
       extname: '.html'
@@ -117,9 +123,8 @@ gulp.task('browser-sync', syncTasks, () => {
     }
   })
 
-  gulp
-    .watch([srcPaths.templates, srcPaths.hbs.partials, srcPaths.hbs.helpers, srcPaths.hbs.data], ['templates-watch'])
-    .watch(srcPaths.scripts, ['scripts-watch'])
+  gulp.watch([srcPaths.templates, srcPaths.hbs.partials, srcPaths.hbs.helpers, srcPaths.hbs.data], ['templates-watch']);
+  gulp.watch(srcPaths.scripts, ['scripts-watch']);
 });
 
 gulp.task('stylesheets-watch', function() {
