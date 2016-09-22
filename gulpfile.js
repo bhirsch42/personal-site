@@ -113,6 +113,7 @@ gulp.task('stylesheets', function () {
     .pipe(sourcemaps.write())
     .pipe(autoprefixer(autoprefixerOptions))
     .pipe(gulp.dest(buildPaths.stylesheets))
+    .pipe(browserSync.stream())
     .resume();
 });
 
@@ -151,15 +152,12 @@ gulp.task('browser-sync', syncTasks, () => {
 
   gulp.watch([srcPaths.templates, srcPaths.hbs.partials, srcPaths.hbs.helpers, srcPaths.hbs.data], ['templates-watch']);
   gulp.watch(srcPaths.scripts, ['scripts-watch']);
+  gulp.watch(srcPaths.stylesheets, ['stylesheets-watch']);
 });
 
-gulp.task('stylesheets-watch', function() {
-  return gulp
-    .watch(srcPaths.stylesheets, ['stylesheets'])
-    .on('change', function(event) {
-      console.log('File ' + event.path + ' was ' + event.type + ', running tasks...');
-      browserSync.reload()
-    });
+gulp.task('stylesheets-watch', ['stylesheets'], (done) => {
+  // browserSync.reload();
+  done();
 });
 
 gulp.task('templates-watch', ['templates'], (done) => {
