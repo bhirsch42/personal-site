@@ -202,8 +202,8 @@
   iframe.handset {
     min-width: $device_handset_width + 1;
     max-width: $device_handset_width + 1;
-    min-height: $device_handset_height + 1;
-    max-height: $device_handset_height + 1;
+    min-height: $device_handset_height + 2;
+    max-height: $device_handset_height + 2;
     transform: translateX(-1px) translateY(-1px);
   }
 
