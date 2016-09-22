@@ -61,7 +61,9 @@ hr {
   display: flex;
   justify-content: center;
   position: relative;
-  // border: 1px solid red;
+
+  margin-top: 20px;
+  margin-bottom: 20px;
 
   $scalar: .65;
 
@@ -70,7 +72,6 @@ hr {
     max-width: 2510px * $scalar;
     min-height: 1185px * $scalar;
     max-height: 1185px * $scalar;
-    // background-color: blue;
     position: relative;
   }
 
@@ -81,7 +82,6 @@ hr {
     min-height: 1080px;
     max-height: 1080px;
     transform: scale($scalar) translateX(338px) translateY(290px);
-    // border: 1px solid green;
     bottom: 0;
   }
 
@@ -134,6 +134,19 @@ hr {
     }
     .devices-wrapper {
       transform: scale($scalar) translateX(-4590px) translateY(3060px);
+    }
+  }
+
+  @media screen and (max-width: 400px)  {
+    $scalar: .12;
+    .devices-wrapper-center {
+      min-width: 2510px * $scalar;
+      max-width: 2510px * $scalar;
+      min-height: 1185px * $scalar;
+      max-height: 1185px * $scalar;
+    }
+    .devices-wrapper {
+      transform: scale($scalar) translateX(-6190px) translateY(3960px);
     }
   }
 
@@ -202,10 +215,11 @@ hr {
     }
   }
   iframe.window {
-    min-width: $device_window_width;
-    max-width: $device_window_width;
+    min-width: $device_window_width + 1;
+    max-width: $device_window_width + 1;
     min-height: $device_window_height;
     max-height: $device_window_height;
+    transform: translateX(-1px) translateY(-3px);
   }
 
   $device_handset_width: 360px;
@@ -242,10 +256,11 @@ hr {
     }
   }
   iframe.handset {
-    min-width: $device_handset_width;
-    max-width: $device_handset_width;
+    min-width: $device_handset_width + 1;
+    max-width: $device_handset_width + 1;
     min-height: $device_handset_height;
     max-height: $device_handset_height;
+    transform: translateX(-1px)
   }
 
   $device_tablet_width: 1280px;
@@ -281,9 +296,10 @@ hr {
     }
   }
   iframe.tablet {
-    min-width: $device_tablet_width;
-    max-width: $device_tablet_width;
+    min-width: $device_tablet_width + 1;
+    max-width: $device_tablet_width + 1;
     min-height: $device_tablet_height;
     max-height: $device_tablet_height;
+    transform: translateX(-1px)
   }
 }
