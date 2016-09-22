@@ -9,31 +9,8 @@
     </header>
     <h1>{{ title }}</h1>
     <time>{{ date }}</time>
-    {{#block "contents"}}{{/block}}
+    {{#block "project-content"}}{{/block}}
     <footer>
     </footer>
   {{/content}}
 {{/extend}}
-{{!--
-<!doctype html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <title>{{ title }}</title>
-  <meta name="description" content="{{ description }}">
-</head>
-<body>
-  <header>
-    <p>
-      <a href="/">Home</a>
-    </p>
-
-  </header>
-  <h1>{{ title }}</h1>
-  <time>{{ date }}</time>
-  {{#block "body"}}{{/block}}
-  <footer>
-  </footer>
-</body>
-</html>
- --}}

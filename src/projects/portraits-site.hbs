@@ -4,9 +4,12 @@ title: "Local Artist Portfolio"
 date: "Sun Sep 18 04:30:52 2016"
 ---
 {{#extend "project" @file.frontMatter}}
-  {{#content "contents"}}
+  {{#content "head"}}
+    <link rel="stylesheet" type="text/css" href="/stylesheets/responsive-demo.css">
+  {{/content}}
+  {{#content "project-content"}}
     Boy howdy aren't clients interesting.
-    {{!-- {{>responsive-demo site="rebeccabeckerartist.com"}} --}}
+    {{!-- {{>responsive-demo site="www.rebeccabeckerartist.com"}} --}}
     {{>responsive-demo site="design.google.com"}}
   {{/content}}
 {{/extend}}
