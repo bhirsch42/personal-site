@@ -15,6 +15,7 @@ srcPaths = {
   stylesheets: './src/stylesheets/*.scss',
   scripts: './src/scripts/*.js',
   templates: './src/{,projects/}*.hbs',
+  public: './src/public/*',
   hbs: {
     partials: './src/assets/partials/*.hbs',
     helpers: './src/assets/helpers/*.js',
@@ -26,7 +27,8 @@ buildPaths = {
   root: './build',
   stylesheets: './build/stylesheets',
   scripts: './build/scripts',
-  templates: './build'
+  templates: './build',
+  public: './build/public'
 }
 
 defaultTasks = [
@@ -39,7 +41,8 @@ gulp.task('default', defaultTasks, () => {});
 buildTasks = [
   'templates',
   'stylesheets',
-  'scripts'
+  'scripts',
+  'public'
 ];
 
 gulp.task('build', buildTasks, () => {});
@@ -49,7 +52,11 @@ gulp.task('clean', () => {
   return del([buildPaths.root]);
 });
 
-
+gulp.task('public', () => {
+  gulp
+    .src(srcPaths.public)
+    .pipe(gulp.dest(buildPaths.public));
+});
 
 // Build HTML from Handlebars templates
 var hbData;
@@ -165,7 +172,7 @@ gulp.task('templates-watch', ['templates'], (done) => {
   done();
 });
 
-gulp.task('scripts-watch', function() {
+gulp.task('scripts-watch', ['scripts'], function(done) {
   browserSync.reload();
   done();
 });

@@ -2,14 +2,37 @@
 {{#extend "layout"}}
   {{#content "body"}}
     <header>
-      <p>
-        <a href="/">Home</a>
-      </p>
-
+      {{!-- <p> --}}
+        {{!-- <a href="/">Home</a> --}}
+      {{!-- </p> --}}
     </header>
-    <h1>{{ title }}</h1>
-    <time>{{ date }}</time>
-    {{#block "project-content"}}{{/block}}
+    <div class="hero">
+      {{#block "hero"}}{{/block}}
+    </div>
+    <div class="narrow">
+      <h1>{{ title }}</h1>
+      <div class="tech">
+        <div class="tech-category frameworks">
+          {{#if_in tech 'meteor'}} <a target="_blank" href="https://www.meteor.com/" class="tech-item">Meteor</a>{{/if_in}}
+        </div>
+        <div class="tech-category languages">
+          {{#if_in tech 'coffee'}} <a target="_blank" href="http://coffeescript.org/" class="tech-item">CoffeeScript</a>{{/if_in}}
+          {{#if_in tech 'meteor-jade'}} <a target="_blank" href="https://github.com/mquandalle/meteor-jade" class="tech-item">Jade</a>{{/if_in}}
+          {{#if_in tech 'less'}} <a target="_blank" href="http://lesscss.org/" class="tech-item">Less</a>{{/if_in}}
+        </div>
+        <div class="tech-category services">
+          {{#if_in tech 'coffee'}} <a target="_blank" href="http://cloudinary.com/" class="tech-item">Cloudinary</a>{{/if_in}}
+          {{#if_in tech 'coffee'}} <a target="_blank" href="https://aws.amazon.com/s3/" class="tech-item">S3</a>{{/if_in}}
+          {{#if_in tech 'coffee'}} <a target="_blank" href="https://aws.amazon.com/ec2/" class="tech-item">EC2</a>{{/if_in}}
+        </div>
+        <div class="tech-category design">
+          {{#if_in tech 'sketch'}} <a target="_blank" href="https://sketchapp.com/" class="tech-item">Sketch 3</a>{{/if_in}}
+        </div>
+      </div>
+    </div>
+    <div class="project-content">
+      {{#block "project-content"}}{{/block}}
+    </div>
     <footer>
     </footer>
   {{/content}}

@@ -2,14 +2,47 @@
 collection: "Projects"
 title: "Local Artist Portfolio"
 date: "Sun Sep 18 04:30:52 2016"
+repo: "https://github.com/bhirsch42/rebecca-becker"
+tech: ["meteor", "coffee", "meteor-jade", "less", "cloudinary", "s3", "ec2", "sketch"]
 ---
 {{#extend "project" @file.frontMatter}}
   {{#content "head"}}
     <link rel="stylesheet" type="text/css" href="/stylesheets/responsive-demo.css">
   {{/content}}
+
+  {{#content "hero"}}
+  {{/content}}
+
   {{#content "project-content"}}
-    Boy howdy aren't clients interesting.
+    {{!-- {{>responsive-demo site="design.google.com"}} --}}
     {{!-- {{>responsive-demo site="www.rebeccabeckerartist.com"}} --}}
-    {{>responsive-demo site="design.google.com"}}
+    <div class="narrow">
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+      {{>img class="single" src="/public/portraits-admin-dict.png"}}
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+      {{>img class="single" src="/public/portraits-old.png"}}
+      <p>
+        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
+        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
+        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
+        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
+        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
+        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+      </p>
+    </div>
   {{/content}}
 {{/extend}}
