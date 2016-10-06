@@ -26,11 +26,11 @@ foo: 'bar'
 
   <hr>
   <h1>Projects</h1>
-  <ul>
-  {{#each @root.Projects}}
-   <li><a href="{{url this}}">{{frontMatter.title}}</div></li>
-  {{/each}}
-  </ul>
+  <div class="project-thumbs">
+    {{#each @root.Projects}}
+      {{>project-thumb this}}
+    {{/each}}
+  </div>
 
   {{/content}}
 

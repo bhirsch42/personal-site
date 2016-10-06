@@ -1,0 +1,18 @@
+{{#extend "layout"}}
+{{#content "body"}}
+
+<div class="nav">
+  <a href="/">Home</a> < Projects
+</div>
+
+<div class="center">
+<h1 class="big">Projects</h1>
+<div class="project-thumbs">
+  {{#each @root.Projects}}
+    {{>project-thumb this}}
+  {{/each}}
+</div>
+</div>
+
+{{/content}}
+{{/extend}}

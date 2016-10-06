@@ -6,11 +6,14 @@
         {{!-- <a href="/">Home</a> --}}
       {{!-- </p> --}}
     </header>
+    <div class="nav">
+      <a href="/">Home</a> < <a href="\projects">Projects</a> < {{ title }}
+    </div>
     <div class="hero">
       {{#block "hero"}}{{/block}}
     </div>
     <div class="narrow">
-      <h1>{{ title }}</h1>
+      <h1 class="project-title">{{ title }}</h1>
       <div class="tech">
         <div class="tech-category frameworks">
           {{#if_in tech 'meteor'}} <a target="_blank" href="https://www.meteor.com/" class="tech-item">Meteor</a>{{/if_in}}

@@ -1,7 +1,11 @@
+{{#if_eq class "none" }}
+  <div class="image">
+    <img src="/public/{{../src}}" alt="{{alt}}">
+  </div>
+{{/if_eq}}
+
 {{#if_eq class "single" }}
   <div class="image">
-    <img class="pswp-image" src="{{../src}}" alt="{{alt}}">
+    <img class="pswp-image" src="/public/{{../src}}" alt="{{alt}}" data-width="{{img_width ../src @root}}" data-height="{{img_height ../src @root}}">
   </div>
-  {{#content "footer" mode="append"}}
-  {{/content}}
 {{/if_eq}}

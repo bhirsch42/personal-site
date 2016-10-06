@@ -14,4 +14,12 @@ module.exports.register = Handlebars => {
       return options.fn();
     }
   });
+
+  Handlebars.registerHelper('img_width', (filename, root, options) => {
+    return root.image[filename].width
+  });
+
+  Handlebars.registerHelper('img_height', (filename, root, options) => {
+    return root.image[filename].height
+  });
 }

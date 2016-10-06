@@ -4,10 +4,28 @@ title: "Local Artist Portfolio"
 date: "Sun Sep 18 04:30:52 2016"
 repo: "https://github.com/bhirsch42/rebecca-becker"
 tech: ["meteor", "coffee", "meteor-jade", "less", "cloudinary", "s3", "ec2", "sketch"]
+thumb: "portraits-homepage.png"
 ---
 {{#extend "project" @file.frontMatter}}
   {{#content "head"}}
     <link rel="stylesheet" type="text/css" href="/stylesheets/responsive-demo.css">
+    <style>
+      .color1 {
+        color: rgba(91, 192, 235, 1);
+      }
+      .color2 {
+        color: #F7D800;
+      }
+      .color3 {
+        color: rgba(155, 197, 61, 1);
+      }
+      .color4 {
+        color: rgba(229, 89, 52, 1);
+      }
+      .color5 {
+        color: rgba(250, 121, 33, 1);
+      }
+    </style>
   {{/content}}
 
   {{#content "hero"}}
@@ -15,33 +33,34 @@ tech: ["meteor", "coffee", "meteor-jade", "less", "cloudinary", "s3", "ec2", "sk
 
   {{#content "project-content"}}
     {{!-- {{>responsive-demo site="design.google.com"}} --}}
-    {{!-- {{>responsive-demo site="www.rebeccabeckerartist.com"}} --}}
+    {{>responsive-demo site="www.rebeccabeckerartist.com"}}
     <div class="narrow">
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        I built <a target="_blank" href="http://www.rebeccabeckerartist.com/">RebeccaBeckerArtist.com</a> for a client. We communicated by email for several months, discussing changes until the site was to her liking. I was initially approached to make some simple edits to the original site (add a portrait to this category, change that price, etc.), but when asked to add a new category entirely, I discovered an issue. Here's what the original site looked like:
       </p>
-      {{>img class="single" src="/public/portraits-admin-dict.png"}}
+      {{>img class="single" src="portraits-old.png"}}
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        A little dated, but not too bad, right? That's what I thought, until I discovered that all of the nav elements and the headers, right down to the box-shadow, were <i>absolutely-positioned images</i>. That meant that, every time you wanted to add a new tab, you had to create new images for <i>all</i> of the tabs, before you even started finagling with the routes. Since the site also didn't look too sharp on mobile, I proposed we begin again from the ground-up, and after a few handfuls of iterations I delivered a
+        <i><b>
+        <span class="color1">sleek</span>
+        <span class="color2">new</span>
+        <span class="color3">responsive</span>
+        <span class="color4">single-page</span>
+        <span class="color5">application!</span>
+        </b></i>
+        It even has a Content Management System! Courtesy of <a target="_blank" href="http://www.orionjs.org/">Orion</a>.
       </p>
-      {{>img class="single" src="/public/portraits-old.png"}}
+      {{>img class="single" src="portraits-admin-dict.png"}}
       <p>
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod
-        tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam,
-        quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo
-        consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse
-        cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non
-        proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+        Now Rebecca can edit her site herself, without having to throw change at a web developer, as the application spins etherially on an EC2 instance for less money per-month than her silly old site cost on GoDaddy.
+        <h1>Retrospective</h1>
+      </p>
+      <blockquote>I suppose it is tempting, if the only tool you have is a hammer, to treat everything as if it were a nail.</blockquote>
+      <p>
+        Ah, to be young and in love. Meteor was my first real Javascript framework. A friend from work had introduced us, and I was smitten from the start. Where once I had been salting my own hashes, now I was importing entire CMS's with a single line. Never had I felt such power! But, in retrospect, Rebecca didn't need a Meteor application. She doesn't even update her site particularly often, so even Wordpress might have been overkill. No, Rebecca needed a static website. Perhaps hosted on S3 and sped along by Cloudfront. The resulting site would have loaded faster, been cheaper to host, been easier to SEO, and have taken a fraction of the time to build. But I'm still proud of this site, blinded though I may have been by Node's beauty.
+      </p>
+      <p>
+        While Meteor and I may someday have to part ways, she being so difficult to scale since she insists on maintaining open sockets with all connected users, she will always be my first framework, and I'll never forget her.
       </p>
     </div>
   {{/content}}

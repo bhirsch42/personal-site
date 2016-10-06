@@ -129,7 +129,7 @@ var frames = [
   [600, 'typeTitle', "ThE ChOsEn OnE"],
   [1800, 'left', "stop it"],
   [1400, 'clearTitle'],
-  [600, 'typeTitle', "super FUN code man! :D :D :D"],
+  [600, 'typeTitle', "super FUN code man! :D"],
   [2600, 'left', "STOP"],
   [1800, 'right', "i really like that one"],
   [2600, 'left', "you can't leave it like that"],

@@ -1,3 +1,5 @@
+$blue: darken(rgba(91, 192, 235, 1), 15);
+
 @keyframes blink{
   0%   {opacity: 0;}
   1%   {opacity: 1}
@@ -127,10 +129,10 @@
   .gag-right {
     .message {
       color: white;
-      background-color: #3993DD;
+      background-color: $blue;
       &::after {
         right: -10px;
-        border-bottom: 10px solid #3993DD;
+        border-bottom: 10px solid $blue;
       }
     }
   }

@@ -9,13 +9,17 @@ const autoprefixer = require('gulp-autoprefixer');
 const browserSync  = require('browser-sync');
 const data         = require('gulp-data');
 const frontMatter  = require('gulp-front-matter');
-const prettyUrl    = require("gulp-pretty-url");
+const prettyUrl    = require('gulp-pretty-url');
+const imageResize  = require('gulp-image-resize');
+const parallel     = require('concurrent-transform');
+const gm           = require('gulp-gm');
 
 srcPaths = {
   stylesheets: './src/stylesheets/*.scss',
   scripts: './src/scripts/*.js',
   templates: './src/{,projects/}*.hbs',
   public: './src/public/*',
+  pngs: './src/public/images/*.png',
   hbs: {
     partials: './src/assets/partials/*.hbs',
     helpers: './src/assets/helpers/*.js',
@@ -39,10 +43,10 @@ defaultTasks = [
 gulp.task('default', defaultTasks, () => {});
 
 buildTasks = [
-  'templates',
+  'public',
   'stylesheets',
   'scripts',
-  'public'
+  'templates'
 ];
 
 gulp.task('build', buildTasks, () => {});
@@ -52,10 +56,30 @@ gulp.task('clean', () => {
   return del([buildPaths.root]);
 });
 
-gulp.task('public', () => {
-  gulp
-    .src(srcPaths.public)
-    .pipe(gulp.dest(buildPaths.public));
+publicTasks = [
+  'convert-png'
+]
+
+pngData = {};
+
+gulp.task('public', publicTasks, () => {
+});
+
+gulp.task('get-data-png', () => {
+  return gulp
+    .src(srcPaths.pngs)
+    .pipe(gm(function (gmfile) {
+      filename = gmfile.source.split('/').pop()
+      gmfile.size((err, size) => {
+        pngData[filename] = size;
+      });
+      return gmfile;
+    }))
+});
+
+
+gulp.task('convert-png', ['get-data-png'], () => {
+
 });
 
 // Build HTML from Handlebars templates
@@ -68,7 +92,7 @@ function addGlobalDataFromFile(data) {
   }
 }
 
-gulp.task('refreshData', () => {
+gulp.task('get-data-frontmatter', () => {
   hbData = {};
 
   return gulp
@@ -79,7 +103,7 @@ gulp.task('refreshData', () => {
       }));
 })
 
-gulp.task('templates', ['refreshData'], () => {
+gulp.task('templates', ['get-data-frontmatter', 'get-data-png'], () => {
   var hbStream = hb()
     .partials(srcPaths.hbs.partials)
     .helpers(require('handlebars-layouts'))
@@ -87,6 +111,7 @@ gulp.task('templates', ['refreshData'], () => {
     .helpers(srcPaths.hbs.helpers)
     .data(srcPaths.hbs.data)
     .data(hbData)
+    .data({image:pngData})
 
   return gulp
     .src(srcPaths.templates)
