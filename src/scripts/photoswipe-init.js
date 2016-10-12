@@ -5,7 +5,7 @@ $('.pswp-image').click((e) => {
   var pswpElement = document.querySelectorAll('.pswp')[0];
   var items = images.map((index, image) => {
     image = $(image);
-    var d = {src: image.attr('src'), w: image.data('width'), h: image.data('height')}
+    var d = {src: image.data('pswp-src'), w: image.data('width'), h: image.data('height')}
     return d
   })
   var options = {

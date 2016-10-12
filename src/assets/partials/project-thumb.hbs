@@ -1,4 +1,7 @@
 <a href="{{url this}}" class="project-thumb">
-  {{>img class="none" src=this.frontMatter.thumb}}
+  {{!-- {{>img class="none" src=this.frontMatter.thumb}} --}}
+  <div class="image">
+    <img src="/public/{{img_resize this.frontMatter.thumb null 200 @root}}" alt="{{alt}}">
+  </div>
   <div class="title">{{this.frontMatter.title}}</div>
 </a>

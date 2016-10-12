@@ -5,7 +5,7 @@
 {{/if_eq}}
 
 {{#if_eq class "single" }}
-  <div class="image">
-    <img class="pswp-image" src="/public/{{../src}}" alt="{{alt}}" data-width="{{img_width ../src @root}}" data-height="{{img_height ../src @root}}">
+  <div class="image" style="{{img_res_style_narrow_outer ../src @root}}">
+    <img class="pswp-image" src="/public/{{img_resize ../src null 500 @root}}" alt="{{alt}}" data-pswp-src="/public/{{../src}}" data-width="{{img_width ../src @root}}" data-height="{{img_height ../src @root}}" style="{{img_res_style_narrow_inner ../src @root}}">
   </div>
 {{/if_eq}}

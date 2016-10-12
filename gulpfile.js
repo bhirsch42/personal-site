@@ -20,6 +20,7 @@ srcPaths = {
   templates: './src/{,projects/}*.hbs',
   public: './src/public/*',
   pngs: './src/public/images/*.png',
+  imagesRoot: './src/public/images/',
   hbs: {
     partials: './src/assets/partials/*.hbs',
     helpers: './src/assets/helpers/*.js',
@@ -43,7 +44,6 @@ defaultTasks = [
 gulp.task('default', defaultTasks, () => {});
 
 buildTasks = [
-  'public',
   'stylesheets',
   'scripts',
   'templates'
@@ -65,11 +65,15 @@ pngData = {};
 gulp.task('public', publicTasks, () => {
 });
 
+function getImageFilenameFromGmfile(gmfile) {
+  return gmfile.source.split('/').pop()
+}
+
 gulp.task('get-data-png', () => {
   return gulp
     .src(srcPaths.pngs)
-    .pipe(gm(function (gmfile) {
-      filename = gmfile.source.split('/').pop()
+    .pipe(gm((gmfile) => {
+      filename = getImageFilenameFromGmfile(gmfile)
       gmfile.size((err, size) => {
         pngData[filename] = size;
       });
@@ -78,8 +82,45 @@ gulp.task('get-data-png', () => {
 });
 
 
-gulp.task('convert-png', ['get-data-png'], () => {
+gulp.task('templates', ['convert-png', 'hb-templates'], () => {
+  return gulp;
+});
 
+gulp.task('convert-png', ['get-data-png', 'hb-templates'], () => {
+  conversions = Object.keys(pngData)
+    .filter((filename) => {
+      return pngData[filename].gm;
+    })
+    .map((filename) => {
+      return Object.keys(pngData[filename].gm).map((newFilename) =>{
+        return pngData[filename].gm[newFilename];
+      });
+    });
+  conversions = [].concat.apply([], conversions);
+  console.log(conversions);
+
+  conversions.forEach((conversion) => {
+    gulp
+      .src(srcPaths.imagesRoot + conversion.filename)
+      .pipe(rename({
+        basename: conversion.newFilename.split('.')[0]
+      }))
+      .pipe(gm((gmfile) => {
+        if (conversion.conversion == 'resize') {
+          console.log(conversion.params.width, conversion.params.height);
+          return gmfile.resize(conversion.params.width, conversion.params.height);
+        }
+      }))
+      .pipe(gulp.dest(buildPaths.public));
+
+  });
+
+  gulp
+    .src(srcPaths.pngs)
+    .pipe(gm((gmfile) => {
+      return gmfile;
+    }))
+    .pipe(gulp.dest(buildPaths.public));
 });
 
 // Build HTML from Handlebars templates
@@ -103,7 +144,7 @@ gulp.task('get-data-frontmatter', () => {
       }));
 })
 
-gulp.task('templates', ['get-data-frontmatter', 'get-data-png'], () => {
+gulp.task('hb-templates', ['get-data-frontmatter', 'get-data-png'], () => {
   var hbStream = hb()
     .partials(srcPaths.hbs.partials)
     .helpers(require('handlebars-layouts'))
@@ -111,7 +152,7 @@ gulp.task('templates', ['get-data-frontmatter', 'get-data-png'], () => {
     .helpers(srcPaths.hbs.helpers)
     .data(srcPaths.hbs.data)
     .data(hbData)
-    .data({image:pngData})
+    .data({image:pngData, gulp:gulp})
 
   return gulp
     .src(srcPaths.templates)
@@ -169,11 +210,7 @@ gulp.task('scripts', () => {
 });
 
 // BrowserSync
-syncTasks = [
-  'stylesheets-watch',
-  // 'templates-watch',
-  // 'scripts-watch'
-]
+syncTasks = ['build']
 
 gulp.task('browser-sync', syncTasks, () => {
   browserSync.init({
@@ -184,12 +221,6 @@ gulp.task('browser-sync', syncTasks, () => {
 
   gulp.watch([srcPaths.templates, srcPaths.hbs.partials, srcPaths.hbs.helpers, srcPaths.hbs.data], ['templates-watch']);
   gulp.watch(srcPaths.scripts, ['scripts-watch']);
-  gulp.watch(srcPaths.stylesheets, ['stylesheets-watch']);
-});
-
-gulp.task('stylesheets-watch', ['stylesheets'], (done) => {
-  // browserSync.reload();
-  done();
 });
 
 gulp.task('templates-watch', ['templates'], (done) => {
@@ -200,4 +231,24 @@ gulp.task('templates-watch', ['templates'], (done) => {
 gulp.task('scripts-watch', ['scripts'], function(done) {
   browserSync.reload();
   done();
+});
+
+gulp.task('deploy', function(done) {
+  console.log("Deploying to s3...")
+  var exec = require('child_process').exec;
+  var cmd = 's3-website deploy build/';
+
+  exec(cmd, function(error, stdout, stderr) {
+    if (error) {
+      console.log(error)
+      done()
+    } else {
+      console.log(stdout);
+      console.log(stderr);
+      console.log('Deployed to s3 successfully.')
+      done()
+    }
+  });
+  // Could add this to .s3-website.json:
+  // "gzipTypes":"text\/html|text\/css|application\/javascript"
 });
