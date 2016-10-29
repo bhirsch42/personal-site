@@ -2,10 +2,46 @@
 collection: "Projects"
 title: "This Site"
 date: "Sun Sep 18 04:30:52 2016"
-thumb: "portraits-homepage.png"
+thumb: "this-site-thumb.png"
+tech: ["gulp", "es2015", "s3", "cloudfront", "handlebars", "sass", "html", 'handlebars']
+github: 'https://github.com/bhirsch42/personal-site'
 ---
 {{#extend "project" @file.frontMatter}}
-  {{#content "contents"}}
-    This is my personal site.
+  {{#content "head"}}
+    <link rel="stylesheet" type="text/css" href="/stylesheets/responsive-demo.css">
+    <style>
+      .color1 {
+        color: rgba(91, 192, 235, 1);
+      }
+      .color2 {
+        color: #F7D800;
+      }
+      .color3 {
+        color: rgba(155, 197, 61, 1);
+      }
+      .color4 {
+        color: rgba(229, 89, 52, 1);
+      }
+      .color5 {
+        color: rgba(250, 121, 33, 1);
+      }
+    </style>
+  {{/content}}
+  {{#content "project-content"}}
+    {{>responsive-demo site="benhirsch.info"}}
+    <div class="narrow">
+      <p>
+        Haha, so meta!
+      </p>
+      <p>
+        The most important thing about this website, besides hopefully making people want to hire me, is that it taught me how to use Gulp. According to <a href="http://www.joelonsoftware.com/articles/fog0000000043.html" target="_blank">The Joel Test</a>, you should ask a company you're considering working for if developers working on their product can make a build in one step. To that end, I figured I should learn how to use one of the most common tools used to make that happen. Which in turn, hopefully, will make people want to hire me.
+      </p>
+      <p>
+        This is a static site, hosted on Amazon S3 and distributed by Amazon CloudFront, compiled from Handlebars files, Sass files, and fancy ES6 JavaScript files. It's not wildly complicated, but it still gives me a lot of joy when I type "<code>gulp deploy</code>" into my console and wham-bam-thank-you-ma'am, my spiffy site has all the new words I typed right there in it.
+      </p>
+      <p>
+        Also, while we're talking about this site, I'd like to call special attention to that neat-o responsive preview that's up at the top of the page. It's two kinds of responsive! 1) It resizes based on the width of the viewport, and 2) it shows you what a webpage would look like at different viewport widths! It's probably worth pointing out that it's a blatant rip-off of <a href="http://design.google.com/resizer/" target="_blank">Google Resizer</a>. I tried just embedding Google's little tool into my webpages, but Google has some cross-origin detection nonsense that makes that decidedly not work. So instead, I made my own! You can check it out in <a href="http://codepen.io/bhirsch42/pen/EgkVrR" target="_blank">this codepen</a>.
+      </p>
+    </div>
   {{/content}}
 {{/extend}}

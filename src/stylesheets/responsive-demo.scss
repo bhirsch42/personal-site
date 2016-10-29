@@ -162,7 +162,7 @@
     max-width: $device_window_width + 1;
     min-height: $device_window_height;
     max-height: $device_window_height;
-    background-color: $device_window_color;
+    // background-color: $device_window_color;
     transform: translateX(-1px) translateY(-3px);
   }
 
@@ -204,7 +204,7 @@
     max-width: $device_handset_width + 1;
     min-height: $device_handset_height + 2;
     max-height: $device_handset_height + 2;
-    background-color: $device_handset_color;
+    // background-color: $device_handset_color;
     transform: translateX(-1px) translateY(-1px);
   }
 
@@ -245,7 +245,7 @@
     max-width: $device_tablet_width + 1;
     min-height: $device_tablet_height + 1;
     max-height: $device_tablet_height + 1;
-      background-color: $device_tablet_color;
+    // background-color: $device_tablet_color;
     transform: translateX(-1px) translateY(-1px);
   }
 }

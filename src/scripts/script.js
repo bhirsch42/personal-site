@@ -1,3 +1,11 @@
+$('#projects-link').click((e) => {
+  // e.preventDevault();
+  $('html, body').animate({
+    scrollTop: $('#projects').offset().top
+  }, 1000);
+  return false;
+})
+
 function addGagMessage(side, content) {
   var el = $(`
     <div class="gag-wrapper gag-wrapper-${side}">

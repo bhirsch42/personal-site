@@ -2,10 +2,132 @@
 collection: "Projects"
 title: "The Improv Comedy Experiment"
 date: "Sun Sep 18 04:30:52 2016"
-thumb: "portraits-homepage.png"
+thumb: "improv-thumb.png"
+tech: ["meteor", "coffee", "meteor-jade", "less", "galaxy", "s3"]
+github: 'https://github.com/bhirsch42/dadsgarage'
 ---
 {{#extend "project" @file.frontMatter}}
-  {{#content "body"}}
-    Wow isn't improv crazy.
+  {{#content "head"}}
+    <link rel="stylesheet" type="text/css" href="/stylesheets/responsive-demo.css">
+  {{/content}}
+  {{#content "project-content"}}
+  <div class="narrow">
+    <p>
+      "In partnership with the local theater 'Dad's Garage,'" Professor Leahy addressed the room, "you will be proposing, designing, and building ways for technology to interact with improvisational comedy."
+    </p>
+    <p>
+      Over the weeks, our vague brainstorms condensated into practical ideas.
+    </p>
+    <p>
+      "What if each improviser in the scene stepped forward and offered the audience an option as to what should happen next? Then, the audience could vote on their phones to pick their favorite option, like a choose-your-own-adventure!"
+    </p>
+    <p>
+      "What if the audience could control whether or not a sick beat plays over the speakers, and whenever it does the improvisers have to rap their lines?"
+    </p>
+    <p>
+      "What if the audience could control the mood of the soundtrack that plays during the scene, and thereby influence the emotional choices the improvises make onstage?"
+    </p>
+    <p>
+      Such disparate, ambitious ideas! How could a humble handful of college students deliver such a powerful user experience in mere months? If only, by some miracle, they could avoid 90% of the work involved in developing a real-time interactivity networking solution.
+    </p>
+    <p>
+      "Hey!" said I, from behind my laptop, "this looks like a job for a Meteor application!"
+    </p>
+    <p>
+      And so, with nothing but my wits, a huge, supportive online framework ecosystem, and StackOverflow, I led a small team of programmers in building a multiplayer remote-control for an improv show.
+    </p>
+    <hr>
+    <p>
+      Using Meteor for small projects feels like cheating. Here's the magic behind it:
+    </p>
+    <p>
+      Meteor creates a clone of the Mongo database in the client's browser. When the user performs an action that updates their local database, the change is immediately reflected by the view. Then, the change is sent to the server to update the real database. <i>Then</i>, the server pushes the change over socket connections to every other user on the site, and when their devices receive the change, they automatically modify their own local databases and update their views.
+    </p>
+    <p>
+      You could build a messaging app in fifteen minutes. It's crazy.
+    </p>
+    <p>
+      And <i>tada</i>! Here's what the choose-your-own-adventure voting system ended up looking like:
+    </p>
+    <div class="video">
+      <video src="/public/simple_vote.mp4" autoplay loop controls></video>
+    </div>
+    <p>
+      The top-left browser window is what the administrator sees while controlling the show. The bottom-left window is what the audience members all see on their phones, and the window on the right is what gets displayed by the projector onstage. You'll just have to take my word for it that it looks much more interesting when a roomfull of people are all simultaneously casting their votes. It's actually quite exciting!
+    </p>
+    <p>
+      In order to make the system work, it had to be as idiot-proof as possible. To that end, we designed the user's view so it would only display controls during the brief period of time in which the audience would actually need to interact with them. That way, the audience wouldn't be too distracted from the scene in front of them.
+    </p>
+    <p>
+      Another advantage of giving the admin complete control over what the users see was the one-step process involved in getting users set up. They didn't have to make accounts, or navigate a menu or anything. They only had to visit the url, and they were good to go.
+    </p>
+    <p>
+      Just to celebrate Meteor a little more, lets take a look at how we let the admin switch a roomful of users between different control layouts cleanly and quickly. First, let's look at the routing code for both the users' view and the stage's view.
+    </p>
+    <pre>
+      <code class="coffeescript hljs">
+        Router.route '/', ->
+          @render 'user_' + ActivePage.get().template
+
+        Router.route '/stage', ->
+          @render 'stage_' + ActivePage.get().template
+      </code>
+    </pre>
+    <p>
+      Huh. That's all there is. But there must be something funky going on in that "<code>ActivePage.get()</code>," so let's see just what's going on in the "<code>ActivePage</code>" collection.
+    </p>
+    <pre>
+      <code class="coffeescript hljs">
+        @ActivePage = new Mongo.Collection 'activePage'
+
+        @ActivePage.set = (template) ->
+          ActivePage.insert template: template, time: Date.now()
+
+        @ActivePage.get = ->
+          activePage = ActivePage.findOne({}, {sort: {time: -1, limit: 1}})
+          return activePage
+      </code>
+    </pre>
+    <p>
+      And once again, we find ourselves with a frighteningly small amount of code. Of course, the secret is in the work that Meteor is doing for us. See, the function <code>ActivePage.get()</code> makes a database query for the most recent entry in the collection, and the routing logic calls <code>ActivePage.get()</code>. Since Meteor makes a point of updating <i>everything for everyone every time</i> the database changes, if a new entry is made in the <code>ActivePage</code> collection, Meteor reruns the routing logic. That means, if you want to make every user's phone render the template called <code>user_voting</code> and the projector onstage to render the template called <code>stage_voting</code>, you need only create a record with an attribute <code>{template: 'voting'}</code>.
+    </p>
+    <p>
+      The whole project turned out to be full of little joys like that.
+    </p>
+    <p>
+      Also, just as some eye-candy, here's a little tool I made that lets you build a grid of songs based on mood an intensity:
+    </p>
+    <div class="video">
+      <video src="/public/voronoi.mp4" autoplay loop controls></video>
+    </div>
+    <h1>Retrospective</h1>
+    </p>
+    <p>
+      I had a few pretty big takeaways after this project wrapped up.
+      <ol>
+        <li><b>Check your security.</b> If your app has a vulnerability, someone in an Improv audience can find it.</li>
+        <li><b>User testing matters.</b></li>
+        <li><b>Project leadership is hard.</b></li>
+      </ol>
+    </p>
+    <p>
+      <b>On security.</b> I assumed that, since the app only needed to work for one night with about a hundred users, I would be able to get away with putting the admin panel at "<code>/admin</code>" with no password protection. I was wrong about that. Within fifteen minutes of the show beginning, an audience member was messing with the show. They changed which controls were showing up for other users, they manipulated the questions in the form everyone was supposed to fill out... I was <i>mad</i>. I was <i>so mad</i>, sitting in the booth next to the lights and sound controls (manned by my professor himself). I was mad that some jerk in the audience was ruining the show, and I was mad at myself for not doing something so simple as making the admin route "<code>/admin-asdf</code>" instead of just freaking "<code>/admin</code>". Sure, it's far, far from actually being secure, but it probably would've held off the Great Improv Hacker at least until the show was over.
+    </p>
+    <p>
+      Granted, though, the audience did have a disproportionate number of Georgia Tech students in it that night.
+    </p>
+    <p>
+      <b>On user testing.</b> As it turns out, user testing helps you make things that work. I tested the voting system in two different improv shows prior to the big night when we had to use everything. I even caught up with some showgoers in the parking lot to get feedback. On the big night, many of the digital audience interactions didn't work as well as we had hoped they would, but the voting system worked perfectly. If we had tested more features piecemeal, the final product would have been better for it.
+    </p>
+    <p>
+      <b>On leadership.</b> At the beginning of the writeup, I said I led a small team of programmers in building this project. This was disingenuous. It's the curse of group projects; rarely, oh so rarely, does the work actually get distributed evenly amongst the group. But this project was a spectacular failing therein, because in this case I actually ended up programming the whole entire thing.
+    </p>
+    <p>
+      Often, this is worn as a badge of sadistic honor. Oh, I did the whole thing! It was so hard! My team left me high and dry, but through my strength of character, I prevailed!
+    </p>
+    <p>
+      I'm really not proud of it this time. It was a very cool class, one that you wouldn't find at any other school, and had I taken the opportunity to practice being a <i>project lead</i> instead of just being a <i>web developer</i>, I and all of my group members could have gained a lot more from it.
+    </p>
+  </div>
   {{/content}}
 {{/extend}}

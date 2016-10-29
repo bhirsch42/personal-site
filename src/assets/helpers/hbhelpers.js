@@ -14,13 +14,26 @@ module.exports.register = Handlebars => {
     return `/${file.relative.split('.')[0]}/`;
   });
 
-  Handlebars.registerHelper('if_in', (arr, s, options) => {
+  Handlebars.registerHelper('if_in', function(arr, s, options) {
     if (arr && s && options && arr.indexOf(s) >= 0) {
       return options.fn(this);
     }
   });
 
-  Handlebars.registerHelper('if_eq', (a, b, options) => {
+  Handlebars.registerHelper('if_intersects', function(arr1, arr2s, options) {
+    if (arr1 && arr2s && options) {
+      arr2 = arr2s.split(',');
+      for (var i = arr1.length - 1; i >= 0; i--) {
+        for (var j = arr2.length - 1; j >= 0; j--) {
+          if (arr1[i] == arr2[j]) {
+            return options.fn(this);
+          }
+        }
+      }
+    }
+  });
+
+  Handlebars.registerHelper('if_eq', function(a, b, options) {
     if (a && b && options && a == b) {
       return options.fn();
     }

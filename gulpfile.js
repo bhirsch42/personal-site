@@ -13,6 +13,9 @@ const prettyUrl    = require('gulp-pretty-url');
 const imageResize  = require('gulp-image-resize');
 const parallel     = require('concurrent-transform');
 const gm           = require('gulp-gm');
+const fs           = require('fs');
+const cloudfront   = require('gulp-cloudfront-invalidate');
+const highlight    = require('gulp-highlight');
 
 srcPaths = {
   stylesheets: './src/stylesheets/*.scss',
@@ -21,6 +24,7 @@ srcPaths = {
   public: './src/public/*',
   pngs: './src/public/images/*.png',
   imagesRoot: './src/public/images/',
+  static: './src/public/static/*',
   hbs: {
     partials: './src/assets/partials/*.hbs',
     helpers: './src/assets/helpers/*.js',
@@ -46,7 +50,8 @@ gulp.task('default', defaultTasks, () => {});
 buildTasks = [
   'stylesheets',
   'scripts',
-  'templates'
+  'templates',
+  'public'
 ];
 
 gulp.task('build', buildTasks, () => {});
@@ -56,13 +61,12 @@ gulp.task('clean', () => {
   return del([buildPaths.root]);
 });
 
-publicTasks = [
-  'convert-png'
-]
-
 pngData = {};
 
-gulp.task('public', publicTasks, () => {
+gulp.task('public', () => {
+  gulp
+    .src(srcPaths.static)
+    .pipe(gulp.dest(buildPaths.public));
 });
 
 function getImageFilenameFromGmfile(gmfile) {
@@ -97,7 +101,6 @@ gulp.task('convert-png', ['get-data-png', 'hb-templates'], () => {
       });
     });
   conversions = [].concat.apply([], conversions);
-  console.log(conversions);
 
   conversions.forEach((conversion) => {
     gulp
@@ -107,7 +110,6 @@ gulp.task('convert-png', ['get-data-png', 'hb-templates'], () => {
       }))
       .pipe(gm((gmfile) => {
         if (conversion.conversion == 'resize') {
-          console.log(conversion.params.width, conversion.params.height);
           return gmfile.resize(conversion.params.width, conversion.params.height);
         }
       }))
@@ -165,6 +167,7 @@ gulp.task('hb-templates', ['get-data-frontmatter', 'get-data-png'], () => {
       extname: '.html'
     }))
     .pipe(prettyUrl())
+    .pipe(highlight())
     .pipe(gulp.dest(buildPaths.templates));
 })
 
@@ -186,7 +189,7 @@ gulp.task('stylesheets', function () {
     .pipe(sourcemaps.write())
     .pipe(autoprefixer(autoprefixerOptions))
     .pipe(gulp.dest(buildPaths.stylesheets))
-    .pipe(browserSync.stream())
+    .pipe(browserSync.reload({stream: true}))
     .resume();
 });
 
@@ -221,6 +224,8 @@ gulp.task('browser-sync', syncTasks, () => {
 
   gulp.watch([srcPaths.templates, srcPaths.hbs.partials, srcPaths.hbs.helpers, srcPaths.hbs.data], ['templates-watch']);
   gulp.watch(srcPaths.scripts, ['scripts-watch']);
+  gulp.watch(srcPaths.stylesheets, ['stylesheets']);
+
 });
 
 gulp.task('templates-watch', ['templates'], (done) => {
@@ -233,19 +238,46 @@ gulp.task('scripts-watch', ['scripts'], function(done) {
   done();
 });
 
-gulp.task('deploy', function(done) {
-  console.log("Deploying to s3...")
+gulp.task('stylesheets-watch', (done) => {
+  done()
+});
+
+deployTasks = [
+  'cloudfront-invalidate',
+  'upload-files'
+]
+
+gulp.task('deploy', deployTasks, (done) => { done() });
+
+gulp.task('cloudfront-invalidate', ['upload-files'],(done) => {
+  fs.readFile('.env', 'utf8', (err, data) => {
+    settings = data.split('\n')
+    AWS_ACCESS_KEY_ID = settings[0].split('=')[1]
+    AWS_SECRET_ACCESS_KEY = settings[1].split('=')[1]
+
+    settings = {
+      distribution: 'E2OR9UAQ451IGU',
+      paths: ['/*'],
+      accessKeyId: AWS_ACCESS_KEY_ID,
+      secretAccessKey: AWS_SECRET_ACCESS_KEY,
+      wait: false
+    }
+
+    return gulp
+      .src('*')
+      .pipe(cloudfront(settings));
+
+  })
+});
+
+gulp.task('upload-files', ['build'], function(done) {
   var exec = require('child_process').exec;
   var cmd = 's3-website deploy build/';
 
   exec(cmd, function(error, stdout, stderr) {
     if (error) {
-      console.log(error)
       done()
     } else {
-      console.log(stdout);
-      console.log(stderr);
-      console.log('Deployed to s3 successfully.')
       done()
     }
   });

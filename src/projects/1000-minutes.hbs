@@ -1,0 +1,52 @@
+---
+collection: "Projects"
+title: "1000 Minutes"
+date: "Sun Sep 18 04:30:52 2016"
+thumb: "1000-minutes-thumb.png"
+tech: ["vue", "serverless", 'dynamodb', 'lambda', 'scss', 's3', 'gulp', 'webpack', 'es2015', 'sass', 'html']
+github: 'https://github.com/bhirsch42/1000minutes'
+---
+{{#extend "project" @file.frontMatter}}
+  {{#content "head"}}
+    <link rel="stylesheet" type="text/css" href="/stylesheets/responsive-demo.css">
+    <style>
+      .color1 {
+        color: rgba(91, 192, 235, 1);
+      }
+      .color2 {
+        color: #F7D800;
+      }
+      .color3 {
+        color: rgba(155, 197, 61, 1);
+      }
+      .color4 {
+        color: rgba(229, 89, 52, 1);
+      }
+      .color5 {
+        color: rgba(250, 121, 33, 1);
+      }
+    </style>
+  {{/content}}
+  {{#content "project-content"}}
+    {{>responsive-demo site="1000minutes.s3-website-ap-southeast-2.amazonaws.com"}}
+    <div class="narrow">
+      <p>
+        <b><a href="http://1000minutes.s3-website-ap-southeast-2.amazonaws.com/" target="_blank">1000 Minutes</a></b> is a very-much-still-in-progress day-planning app based on a <a href="http://waitbutwhy.com/2016/10/100-blocks-day.html" target="_blank">short blog post</a> by "Wait But Why" author Tim Urban. This particular post caught my attention because it reminded me of a lot of the points that Georgetown Professor and time-management afficionado <a href="http://calnewport.com/" target="_blank">Cal Newport</a> likes to discuss on his blog and in his books.
+      </p>
+      <p>
+        The bottom line of these writers' collective musings is, if you don't plan out how you're going to spend your time, you're going to waste a lot of it. Cal's solution to this is to sketch his schedule in a little pocketbook.
+      </p>
+      {{>img class="single" src="cal-newport-schedule.png"}}
+      <p>
+        I, however, am analog-resistant, and have long been reluctant to adopt his strategy. But then, I read Tim's proposition that, when factoring in sleep, you get about 100 ten-minute blocks a day to spend however you like. He even laid them out in a nice square.
+      </p>
+      {{>img class="single" src="100-blocks.png"}}
+      <p>
+        And then, after some fiddling, I realized that if you divide an entire day, all twenty-four hours, into ten-minute intervals, you get 144 blocks. And 144 is a perfect 12-by-12 square! And that discovery seemed so convenient to me, I just had to see what it would be like as a user-interface for a day-planner.
+      </p>
+      <p>
+        Meanwhile, I've been reading up on AWS Lambda, an Amazon service that lets you execute code in the cloud without managing your own servers, and 1000 Minutes seemed like a great app to get some practical experience with it. Once everything is up and running, users should be able to create an account and sync their daily plans between devices, all while only costing me a few cents a month! This is very exciting to me, because without Lambda I would have to pay several dollars a month to rent an EC2 instance full-time. I'm looking forward to this new Lambda world, where developers can host applications with few users practically for free.
+      </p>
+    </div>
+  {{/content}}
+{{/extend}}

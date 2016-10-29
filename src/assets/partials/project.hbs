@@ -7,7 +7,8 @@
       {{!-- </p> --}}
     </header>
     <div class="nav">
-      <a href="/">Home</a> < <a href="\projects">Projects</a> < {{ title }}
+      <a href="/">Home</a> < {{ title }}
+      {{!-- <a href="/">Home</a> < <a href="\projects">Projects</a> < {{ title }} --}}
     </div>
     <div class="hero">
       {{#block "hero"}}{{/block}}
@@ -15,26 +16,55 @@
     <div class="narrow">
       <h1 class="project-title">{{ title }}</h1>
       <div class="tech">
+        {{#if github}} <div class="github"><a href="{{github}}" target="_blank"><img src="/public/GitHub-Mark-120px-plus.png" alt="Github url"></a></div> {{/if}}
+        {{#if_intersects tech "meteor,vue,serverless,handlebars"}}
         <div class="tech-category frameworks">
           {{#if_in tech 'meteor'}} <a target="_blank" href="https://www.meteor.com/" class="tech-item">Meteor</a>{{/if_in}}
+          {{#if_in tech 'vue'}} <a target="_blank" href="https://www.vuejs.org/" class="tech-item">Vue.js</a>{{/if_in}}
+          {{#if_in tech 'serverless'}} <a target="_blank" href="https://www.serverless.com/" class="tech-item">Serverless</a>{{/if_in}}
+          {{#if_in tech 'handlebars'}} <a target="_blank" href="https://www.handlebarsjs.com/" class="tech-item">Handlebars</a>{{/if_in}}
         </div>
+        {{/if_intersects}}
+        {{#if_intersects tech "coffee,meteor-jade,less,es2015"}}
         <div class="tech-category languages">
+          {{#if_in tech 'es2015'}} <a target="_blank" href="https://babeljs.io/docs/learn-es2015/" class="tech-item">JavaScript (ECMAScript 2015)</a>{{/if_in}}
           {{#if_in tech 'coffee'}} <a target="_blank" href="http://coffeescript.org/" class="tech-item">CoffeeScript</a>{{/if_in}}
           {{#if_in tech 'meteor-jade'}} <a target="_blank" href="https://github.com/mquandalle/meteor-jade" class="tech-item">Jade</a>{{/if_in}}
+          {{#if_in tech 'html'}} <a target="_blank" href="http://www.w3schools.com/html/" class="tech-item">HTML</a>{{/if_in}}
           {{#if_in tech 'less'}} <a target="_blank" href="http://lesscss.org/" class="tech-item">Less</a>{{/if_in}}
+          {{#if_in tech 'sass'}} <a target="_blank" href="http://sass-lang.com/" class="tech-item">Sass</a>{{/if_in}}
         </div>
+        {{/if_intersects}}
+        {{#if_intersects tech "cloudinary,s3,cloudfront,ec2,lambda,dynamodb,galaxy"}}
         <div class="tech-category services">
-          {{#if_in tech 'coffee'}} <a target="_blank" href="http://cloudinary.com/" class="tech-item">Cloudinary</a>{{/if_in}}
-          {{#if_in tech 'coffee'}} <a target="_blank" href="https://aws.amazon.com/s3/" class="tech-item">S3</a>{{/if_in}}
-          {{#if_in tech 'coffee'}} <a target="_blank" href="https://aws.amazon.com/ec2/" class="tech-item">EC2</a>{{/if_in}}
+          {{#if_in tech 'cloudinary'}} <a target="_blank" href="http://cloudinary.com/" class="tech-item">Cloudinary</a>{{/if_in}}
+          {{#if_in tech 's3'}} <a target="_blank" href="https://aws.amazon.com/s3/" class="tech-item">Amazon S3</a>{{/if_in}}
+          {{#if_in tech 'cloudfront'}} <a target="_blank" href="https://aws.amazon.com/cloudfront/" class="tech-item">Amazon CloudFront</a>{{/if_in}}
+          {{#if_in tech 'ec2'}} <a target="_blank" href="https://aws.amazon.com/ec2/" class="tech-item">Amazon EC2</a>{{/if_in}}
+          {{#if_in tech 'lambda'}} <a target="_blank" href="https://aws.amazon.com/lambda/" class="tech-item">AWS Lambda</a>{{/if_in}}
+          {{#if_in tech 'dynamodb'}} <a target="_blank" href="https://aws.amazon.com/dynamodb/" class="tech-item">Amazon DynamoDB</a>{{/if_in}}
+          {{#if_in tech 'galaxy'}} <a target="_blank" href="https://www.meteor.com/hosting" class="tech-item">Galaxy</a>{{/if_in}}
         </div>
+        {{/if_intersects}}
+        {{#if_intersects tech "gulp,webpack"}}
+        <div class="tech-category tools">
+          {{#if_in tech 'gulp'}} <a target="_blank" href="http://gulpjs.com/" class="tech-item">Gulp</a>{{/if_in}}
+          {{#if_in tech 'webpack'}} <a target="_blank" href="https://webpack.github.io/" class="tech-item">Webpack</a>{{/if_in}}
+        </div>
+        {{/if_intersects}}
+        {{#if_intersects tech "sketch"}}
         <div class="tech-category design">
           {{#if_in tech 'sketch'}} <a target="_blank" href="https://sketchapp.com/" class="tech-item">Sketch 3</a>{{/if_in}}
         </div>
+        {{/if_intersects}}
       </div>
     </div>
     <div class="project-content">
       {{#block "project-content"}}{{/block}}
+    </div>
+    <div class="nav">
+      <a href="/">Home</a> < {{ title }}
+      {{!-- <a href="/">Home</a> < <a href="\projects">Projects</a> < {{ title }} --}}
     </div>
     <footer>
     </footer>

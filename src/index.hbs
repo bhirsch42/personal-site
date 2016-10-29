@@ -13,8 +13,8 @@ foo: 'bar'
     </div>
     <div class="links">
       <li>
-        <ul><a href="/projects">Projects {{author}}</a></ul>
-        <ul><a href="/resume">Resumé</a></ul>
+        <ul><a id="projects-link" href="/#projects">Projects {{author}}</a></ul>
+        <ul><a target="_blank" href="/public/resume,10-15-16.pdf">Resumé</a></ul>
       </li>
     </div>
   </div>
@@ -25,7 +25,9 @@ foo: 'bar'
   </div>
 
   <hr>
-  <h1>Projects</h1>
+  <div class="center" id="projects">
+    <h1 class="big">Projects</h1>
+  </div>
   <div class="project-thumbs">
     {{#each @root.Projects}}
       {{>project-thumb this}}
